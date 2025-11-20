@@ -1,36 +1,22 @@
-use ark_ff::Field;
+use ark_ff: Field;
 
-pub type Var = usize;
+// x^2 + 6x + 8 = 0
 
-pub struct LinearTerm<F: Field> {
-    pub var: Var,
-    pub coeff: F
-}
+// x * x = v
+// (v + 6x + 8) * 1 = 0
 
-pub struct LinearCombination<F: Field>(pub Vec<LinearTerm<F>>);
+let left_matrix: [[Field; 3]; 2] = [
+    [0, 1, 0],
+    [8, 6, 1]
+];
 
-pub struct Constraint<F: Field> {
-    pub a: LinearCombination<F>,
-    pub b: LinearCombination<F>,
-    pub c: LinearCombination<F>
-}
+let right_matrix: [[Field; 3]; 2] = [
+    [0, 1, 0],
+    [1, 0, 0]
+];
 
-pub struct R1CS<F: Field> {
-    pub constraints: Vec<Constraint<F>>,
-    pub num_vars: usize
-}
+let multiplied_matrix: [[Field; 3]; 2] = [
+    [0, 0, 1],
+    [0, 0, 0]
+];
 
-impl<F: Field> R1CS<F>{
-    pub fn new()-> Self{
-        Self {constraints: Vec[]!, num_vars: 1}
-    }
-
-    pub fn new_var(&mut self)-> Var {
-        self.num_vars += 1;
-        self.num_vars - 1
-    }
-
-    pub fn add_constraint(&mut self, a: LinearCombination<F>, b: LinearCombination<F>, c: LinearCombination<F>){
-        self.constraints.push(Constraint {a, b, c});
-    }
-}
