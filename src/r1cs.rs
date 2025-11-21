@@ -1,22 +1,22 @@
 use ark_bn254::Fr;
 use std::sync::LazyLock;
 
-// x^2 + 6x + 8 = 0
+// x^2 - 6x + 8 = 0
 
 // x * x = v
-// (v + 6x + 8) * 1 = 0
+// (v - 6x + 8) * 1 = 0
 
 macro_rules! fr_matrix {
     ($([$( $x: expr ),*]),* $(,)?) => {
         [
-            $([$( Fr::from($x as u64) ),*]),*
+            $([$( Fr::from($x as i64) ),*]),*
         ]
     };
 }
 
 pub static LEFT_MATRIX: LazyLock<[[Fr; 3]; 2]> = LazyLock::new(|| fr_matrix![
     [0, 1, 0],
-    [8, 6, 1]
+    [8, -6, 1]
 ]);
 
 pub static RIGHT_MATRIX: LazyLock<[[Fr; 3]; 2]> = LazyLock::new(|| fr_matrix![

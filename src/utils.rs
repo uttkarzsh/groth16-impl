@@ -14,8 +14,8 @@ pub fn add_2(a: &[Fr; 2], b: &[Fr; 2]) -> [Fr; 2]{
     [a[0] + b[0], a[1] + b[1]]
 }
 
-pub fn hadamard_product(a: &[Fr; 2], b: &[Fr; 2]) -> Fr {
-    a[0] * b[0] + a[1] * b[1]
+pub fn hadamard_product(a: &[Fr; 2], b: &[Fr; 2]) -> [Fr; 2] {
+    [a[0] * b[0], a[1] * b[1]]
 }
 
 pub fn interpolate(matrix: &[[Fr; 3]; 2], column: usize) -> [Fr; 2] {
