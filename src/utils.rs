@@ -14,13 +14,21 @@ pub fn add_2(a: &[Fr; 2], b: &[Fr; 2]) -> [Fr; 2]{
     [a[0] + b[0], a[1] + b[1]]
 }
 
+pub fn scalar_mul(matrix: &[Fr; 2], scalar: Fr) -> [Fr; 2] {
+    [scalar * matrix[0], scalar * matrix[1]]
+}
+
 pub fn hadamard_product(a: &[Fr; 2], b: &[Fr; 2]) -> [Fr; 2] {
     [a[0] * b[0], a[1] * b[1]]
 }
 
-pub fn interpolate(matrix: &[[Fr; 3]; 2], column: usize) -> [Fr; 2] {
+fn interpolate(matrix: &[[Fr; 3]; 2], column: usize) -> [Fr; 2] {
     let xs: [Fr; 2] = [1u64.into(), 2u64.into()];
     let ys: [Fr; 2] = [matrix[0][column], matrix[1][column]];
     
     [ys[1] - ys[0], Fr::from(2u64) * ys[0] - ys[1]]
+}
+
+pub fn interpolate_matrix(matrix: &[[Fr; 3]; 2]) -> [[Fr; 2]; 3] {
+    [interpolate(matrix, 0), interpolate(matrix, 1), interpolate(matrix, 2)]
 }
