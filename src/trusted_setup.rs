@@ -16,3 +16,8 @@ impl SRS {
         Self { tau, ptau }
     }
 }
+
+pub fn generate_srs() -> SRS {
+    let mut srs = SRS::new();
+    srs
+}
