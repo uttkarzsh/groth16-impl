@@ -1,0 +1,18 @@
+use ark_bn254::Fr;
+use ark_ff::UniformRand;
+use rand::thread_rng;
+
+
+pub struct SRS {
+    pub tau: Fr,
+    pub ptau: [Fr; 1],
+}
+
+impl SRS {
+    pub fn new() -> Self {
+        let mut rng = thread_rng();
+        let tau: Fr = Fr::rand(&mut rng);
+        let ptau: [Fr; 1] = [tau];
+        Self { tau, ptau }
+    }
+}

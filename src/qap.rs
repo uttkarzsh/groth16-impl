@@ -1,6 +1,7 @@
 mod r1cs;
 mod utils;
 mod witness;
+mod trusted_setup;
 
 use utils::{interpolate_matrix, scalar_mul, add_2};
 use r1cs::{LEFT_MATRIX, RIGHT_MATRIX, RESULT_MATRIX};
@@ -20,4 +21,6 @@ pub fn qap_representation(matrix: &[[Fr; 3]; 2], witness: &[Fr; 3]) -> [Fr; 2] {
 pub static u_x = qap_representation(&LEFT_MATRIX, &WITNESS);
 pub static v_x = qap_representation(&RIGHT_MATRIX, &WITNESS);
 pub static w_x = qap_representation(&RESULT_MATRIX, &WITNESS);
+
+
 

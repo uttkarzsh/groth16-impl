@@ -14,6 +14,10 @@ pub fn add_2(a: &[Fr; 2], b: &[Fr; 2]) -> [Fr; 2]{
     [a[0] + b[0], a[1] + b[1]]
 }
 
+pub fn sub_2(a: &[Fr; 2], b: &[Fr; 2]) -> [Fr; 2]{
+    [a[0] - b[0], a[1] - b[1]]
+}
+
 pub fn scalar_mul(matrix: &[Fr; 2], scalar: Fr) -> [Fr; 2] {
     [scalar * matrix[0], scalar * matrix[1]]
 }
