@@ -30,7 +30,8 @@ fn main() {
     let r_w: [Fr; 2] = matrix_mul(&RIGHT_MATRIX, &WITNESS);
     let o_w: [Fr; 2] = matrix_mul(&RESULT_MATRIX, &WITNESS);
 
-    if check_matrix_eq(hadamard_product(&l_w, &r_w), o_w) {
+    let verification_successful: bool = check_matrix_eq(hadamard_product(&l_w, &r_w), o_w);
+    if verification_successful {
         println!("witness correct yay");
     } else {
         println!("wrong witness lol");

@@ -4,5 +4,5 @@
 - R1CS
     - (Lw).(Rw) = (Ow)
 - QAP
-    - u(x).v(x) = w(x)
+    - u(x).v(x) = w(x) + h(x)t(x)
 
