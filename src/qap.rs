@@ -1,5 +1,5 @@
 use ark_bn254::Fr;
-use crate::utils::{interpolate_matrix, scalar_mul,hadamard_product, add_2, sub_2};
+use crate::utils::*;
 use crate::r1cs::{LEFT_MATRIX, RIGHT_MATRIX, RESULT_MATRIX};
 use crate::witness::WITNESS;
 use crate::trusted_setup::{SRS, generate_srs};
@@ -30,15 +30,15 @@ pub fn calculate_t_tau(ptau: [Fr; 2]) -> Fr {
 
 pub static T_TAU: LazyLock<Fr> = LazyLock::new(|| {calculate_t_tau(SRS.ptau)});
 
-pub fn calculate_h_x(u_x: &[Fr; 2], v_x: &[Fr; 2], w_x: &[Fr; 2]) ->[Fr; 2]{
+pub fn calculate_h_x(u_x: &[Fr; 2], v_x: &[Fr; 2], w_x: &[Fr; 2]) ->[Fr; 3]{
     let inv_t_tau: Fr = T_TAU.inverse().unwrap();
     let uv_x2: [Fr; 3] = polynomial_multiplication(&u_x, &v_x);
-    let w_x2: [Fr;3] = [Fr::0u64, w_x[0], w_x[1]];
+    let w_x2: [Fr;3] = [Fr::from(0u64), w_x[0], w_x[1]];
 
-    let h_x: [Fr; 3] = scalar_mul3(&sub_3(&uv_x2, w_x2), inv_t_tau);
+    let h_x: [Fr; 3] = scalar_mul3(&sub_3(&uv_x2, &w_x2), inv_t_tau);
     h_x
 }  
 
-pub static H_X: LazyLock<[Fr; 2]> = LazyLock::new(|| {calculate_h_x(&U_X, &V_X, &W_X)});
+pub static H_X: LazyLock<[Fr; 3]> = LazyLock::new(|| {calculate_h_x(&U_X, &V_X, &W_X)});
 
 

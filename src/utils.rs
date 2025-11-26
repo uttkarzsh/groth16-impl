@@ -30,6 +30,18 @@ pub fn hadamard_product(a: &[Fr; 2], b: &[Fr; 2]) -> [Fr; 2] {
     [a[0] * b[0], a[1] * b[1]]
 }
 
+pub fn hadamard_product3(a: &[Fr; 3], b: &[Fr; 3]) -> [Fr; 3] {
+    [a[0] * b[0], a[1] * b[1], a[2] * b[2]]
+}
+
+pub fn arr_sum2(arr: &[Fr; 2]) -> Fr {
+    arr[0] + arr[1]
+}
+
+pub fn arr_sum3(arr: &[Fr; 3]) -> Fr {
+    arr[0] + arr[1] + arr[2]
+}
+
 pub fn polynomial_multiplication(a: &[Fr; 2], b: &[Fr; 2]) -> [Fr; 3] {
     [a[0] * b[0], a[0] * b[1] + a[1] * b[0], a[1] * b[1]]
 }
