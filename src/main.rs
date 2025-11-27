@@ -5,6 +5,7 @@ mod r1cs;
 mod witness;
 mod trusted_setup;
 mod qap;
+mod curve_ops;
 
 use ark_bn254:: Fr;
 use r1cs::{LEFT_MATRIX, RIGHT_MATRIX, RESULT_MATRIX};
@@ -12,6 +13,7 @@ use witness::{WITNESS};
 use utils::*;
 use trusted_setup::SRS;
 use qap::{U_X, V_X, W_X, HX_TX, T_X, SRS};
+use curve_ops::{mul_over_curve, pairing_check};
 
 fn check_matrix_eq(a: [Fr; 2], b: [Fr; 2]) -> bool {
     let mut is_equal: bool = true;
@@ -59,4 +61,10 @@ fn main() {
     // println!("{} and {}", V_X[0], V_X[1]);
     // println!("{} and {}", W_X[0], W_X[1]);
     // println!("{} and {} and {}", HX_TX[0], HX_TX[1], HX_TX[2]);
+
+    let mul_working: bool = mul_over_curve();
+    println!("{}", mul_working);
+
+    let pair_check: bool = pairing_check();
+    println!("{}", pair_check);
 }
