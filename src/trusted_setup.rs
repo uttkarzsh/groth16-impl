@@ -11,7 +11,7 @@ impl SRS {
     pub fn new() -> Self {
         let mut rng = thread_rng();
         let tau: Fr = Fr::rand(&mut rng);
-        let ptau: [Fr; 2] = [tau, Fr::from(0u64)];
+        let ptau: [Fr; 2] = [tau, Fr::from(1u64)];
         Self { tau, ptau }
     }
 }

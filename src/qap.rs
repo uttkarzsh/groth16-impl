@@ -24,21 +24,16 @@ pub static U_X: LazyLock<[Fr; 2]> = LazyLock::new(|| {qap_representation(&LEFT_M
 pub static V_X: LazyLock<[Fr; 2]> = LazyLock::new(|| {qap_representation(&RIGHT_MATRIX, &WITNESS)});
 pub static W_X: LazyLock<[Fr; 2]> = LazyLock::new(|| {qap_representation(&RESULT_MATRIX, &WITNESS)});
 
-pub fn calculate_t_tau(ptau: [Fr; 2]) -> Fr {
-    SRS.ptau[0] - Fr::from(1u64)
-}
+pub static T_X: LazyLock<[Fr; 3]> = LazyLock::new(|| [Fr::from(1u64), Fr::from(-3i64), Fr::from(2u64)]);
 
-pub static T_TAU: LazyLock<Fr> = LazyLock::new(|| {calculate_t_tau(SRS.ptau)});
-
-pub fn calculate_h_x(u_x: &[Fr; 2], v_x: &[Fr; 2], w_x: &[Fr; 2]) ->[Fr; 3]{
-    let inv_t_tau: Fr = T_TAU.inverse().unwrap();
+pub fn calculate_hx_tx(u_x: &[Fr; 2], v_x: &[Fr; 2], w_x: &[Fr; 2]) ->[Fr; 3]{
     let uv_x2: [Fr; 3] = polynomial_multiplication(&u_x, &v_x);
     let w_x2: [Fr;3] = [Fr::from(0u64), w_x[0], w_x[1]];
 
-    let h_x: [Fr; 3] = scalar_mul3(&sub_3(&uv_x2, &w_x2), inv_t_tau);
-    h_x
+    let hx_tx: [Fr; 3] = sub_3(&uv_x2, &w_x2);
+    hx_tx
 }  
 
-pub static H_X: LazyLock<[Fr; 3]> = LazyLock::new(|| {calculate_h_x(&U_X, &V_X, &W_X)});
+pub static HX_TX: LazyLock<[Fr; 3]> = LazyLock::new(|| {calculate_hx_tx(&U_X, &V_X, &W_X)});
 
 
