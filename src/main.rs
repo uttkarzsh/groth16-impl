@@ -36,14 +36,12 @@ fn main() {
 
     let verification_successful: bool = check_matrix_eq(hadamard_product(&l_w, &r_w), o_w);
     */
-
-    let tau_sq: Fr = SRS.tau * SRS.tau;
-    let ptau3: [Fr; 3] = [tau_sq, SRS.ptau[0], SRS.ptau[1]];    
-    let u_tau: Fr = arr_sum2(&hadamard_product(&U_X, &SRS.ptau));
-    let v_tau: Fr = arr_sum2(&hadamard_product(&V_X, &SRS.ptau));
-    let w_tau: Fr = arr_sum2(&hadamard_product(&W_X, &SRS.ptau));
-    let h_tau_t_tau: Fr = arr_sum3(&hadamard_product3(&HX_TX, &ptau3));
-    // let t_tau: Fr = arr_sum3(&hadamard_product3(&T_X, &ptau3));
+    let ptau_sliced: [Fr; 2] = [SRS.ptau[0], SRS.ptau[1]];
+    let u_tau: Fr = arr_sum(&hadamard_product(&U_X, &ptau_sliced));
+    let v_tau: Fr = arr_sum(&hadamard_product(&V_X, &ptau_sliced));
+    let w_tau: Fr = arr_sum(&hadamard_product(&W_X, &ptau_sliced));
+    let h_tau_t_tau: Fr = arr_sum(&hadamard_product(&HX_TX, &SRS.ptau));
+    // let t_tau: Fr = arr_sum(&hadamard_product(&T_X, &ptau3));
 
     let u_tau_v_tau: Fr = u_tau * v_tau;
     let w_plus_ht_tau: Fr = w_tau + h_tau_t_tau;

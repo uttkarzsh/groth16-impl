@@ -1,22 +1,25 @@
 use ark_bn254::Fr;
-use ark_ff::UniformRand;
+use ark_ff::{UniformRand, Field};
 use rand::thread_rng;
 
-pub struct SRS {
+pub struct SRS <const N: usize> {
     pub tau: Fr,
-    pub ptau: [Fr; 2],
+    pub ptau: [Fr; N],
 }
 
-impl SRS {
+impl <const N: usize> SRS <N> {
     pub fn new() -> Self {
         let mut rng = thread_rng();
         let tau: Fr = Fr::rand(&mut rng);
-        let ptau: [Fr; 2] = [tau, Fr::from(1u64)];
+        let mut ptau: [Fr; N] = [Fr::from(1u64); N];
+        for i in 0..N {
+            ptau[i] = tau.pow([i as u64]);
+        }
         Self { tau, ptau }
     }
 }
 
-pub fn generate_srs() -> SRS {
-    let mut srs = SRS::new();
+pub fn generate_srs<const N: usize>() -> SRS<N> {
+    let mut srs = SRS::<N>::new();
     srs
 }

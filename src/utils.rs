@@ -10,36 +10,44 @@ pub fn matrix_mul(matrix: &[[Fr; 3]; 2], witness: &[Fr; 3]) -> [Fr; 2]{
     out
 }
 
-pub fn add_2(a: &[Fr; 2], b: &[Fr; 2]) -> [Fr; 2]{
-    [a[0] + b[0], a[1] + b[1]]
+pub fn add<const N: usize>(a: &[Fr; N], b: &[Fr; N]) -> [Fr; N]{
+    let mut arr: [Fr; N] = [Fr::from(0u64); N];
+    for i in 0..N{
+        arr[i] = a[i] + b[i];
+    }
+    arr
 }
 
-pub fn sub_3(a: &[Fr; 3], b: &[Fr; 3]) -> [Fr; 3]{
-    [a[0] - b[0], a[1] - b[1], a[2] - b[2]]
+pub fn sub<const N: usize>(a: &[Fr; N], b: &[Fr; N]) -> [Fr; N]{
+    let mut arr: [Fr; N] = [Fr::from(0u64); N];
+    for i in 0..N{
+        arr[i] = a[i] - b[i];
+    }
+    arr
 }
 
-pub fn scalar_mul(matrix: &[Fr; 2], scalar: Fr) -> [Fr; 2] {
-    [scalar * matrix[0], scalar * matrix[1]]
+pub fn scalar_mul<const N: usize>(matrix: &[Fr; N], scalar: Fr) -> [Fr; N] {
+    let mut arr: [Fr; N] = [Fr::from(0u64); N];
+    for i in 0..N{
+        arr[i] = scalar * matrix[i];
+    }
+    arr
 }
 
-pub fn scalar_mul3(matrix: &[Fr; 3], scalar: Fr) -> [Fr; 3] {
-    [scalar * matrix[0], scalar * matrix[1], scalar * matrix[2]]
+pub fn hadamard_product<const N: usize>(a: &[Fr; N], b: &[Fr; N]) -> [Fr; N]{
+    let mut arr: [Fr; N] = [Fr::from(0u64); N];
+    for i in 0..N{
+        arr[i] = a[i] * b[i];
+    }
+    arr
 }
 
-pub fn hadamard_product(a: &[Fr; 2], b: &[Fr; 2]) -> [Fr; 2] {
-    [a[0] * b[0], a[1] * b[1]]
-}
-
-pub fn hadamard_product3(a: &[Fr; 3], b: &[Fr; 3]) -> [Fr; 3] {
-    [a[0] * b[0], a[1] * b[1], a[2] * b[2]]
-}
-
-pub fn arr_sum2(arr: &[Fr; 2]) -> Fr {
-    arr[0] + arr[1]
-}
-
-pub fn arr_sum3(arr: &[Fr; 3]) -> Fr {
-    arr[0] + arr[1] + arr[2]
+pub fn arr_sum<const N: usize>(arr: &[Fr; N]) -> Fr{
+    let mut sum: Fr = Fr::from(0u64);
+    for i in 0..N{
+        sum += arr[i];
+    }
+    sum
 }
 
 pub fn polynomial_multiplication(a: &[Fr; 2], b: &[Fr; 2]) -> [Fr; 3] {
@@ -50,7 +58,7 @@ fn interpolate(matrix: &[[Fr; 3]; 2], column: usize) -> [Fr; 2] {
     let xs: [Fr; 2] = [1u64.into(), 2u64.into()];
     let ys: [Fr; 2] = [matrix[0][column], matrix[1][column]];
     
-    [ys[1] - ys[0], Fr::from(2u64) * ys[0] - ys[1]]
+    [Fr::from(2u64) * ys[0] - ys[1], ys[1] - ys[0]]
 }
 
 pub fn interpolate_matrix(matrix: &[[Fr; 3]; 2]) -> [[Fr; 2]; 3] {

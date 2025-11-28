@@ -11,13 +11,13 @@ pub fn qap_representation(matrix: &[[Fr; 3]; 2], witness: &[Fr; 3]) -> [Fr; 2] {
     let mut a_matn_x: [Fr; 2] = scalar_mul(&matn_x[0], witness[0]);
 
     for i in 1..3 {
-        a_matn_x = add_2(&a_matn_x, &scalar_mul(&matn_x[i], witness[i]));
+        a_matn_x = add(&a_matn_x, &scalar_mul(&matn_x[i], witness[i]));
     }
 
     a_matn_x
 }
 
-pub static SRS: LazyLock<SRS> = LazyLock::new(|| { generate_srs()});
+pub static SRS: LazyLock<SRS<3>> = LazyLock::new(|| { generate_srs::<3>()});
 
 
 pub static U_X: LazyLock<[Fr; 2]> = LazyLock::new(|| {qap_representation(&LEFT_MATRIX, &WITNESS)});
@@ -28,9 +28,9 @@ pub static T_X: LazyLock<[Fr; 3]> = LazyLock::new(|| [Fr::from(1u64), Fr::from(-
 
 pub fn calculate_hx_tx(u_x: &[Fr; 2], v_x: &[Fr; 2], w_x: &[Fr; 2]) ->[Fr; 3]{
     let uv_x2: [Fr; 3] = polynomial_multiplication(&u_x, &v_x);
-    let w_x2: [Fr;3] = [Fr::from(0u64), w_x[0], w_x[1]];
+    let w_x2: [Fr;3] = [w_x[0], w_x[1],Fr::from(0u64)];
 
-    let hx_tx: [Fr; 3] = sub_3(&uv_x2, &w_x2);
+    let hx_tx: [Fr; 3] = sub(&uv_x2, &w_x2);
     hx_tx
 }  
 
