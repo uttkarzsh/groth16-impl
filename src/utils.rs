@@ -34,14 +34,6 @@ pub fn scalar_mul<const N: usize>(matrix: &[Fr; N], scalar: Fr) -> [Fr; N] {
     arr
 }
 
-pub fn hadamard_product<const N: usize>(a: &[Fr; N], b: &[Fr; N]) -> [Fr; N]{
-    let mut arr: [Fr; N] = [Fr::from(0u64); N];
-    for i in 0..N{
-        arr[i] = a[i] * b[i];
-    }
-    arr
-}
-
 pub fn arr_sum<const N: usize>(arr: &[Fr; N]) -> Fr{
     let mut sum: Fr = Fr::from(0u64);
     for i in 0..N{

@@ -7,13 +7,13 @@ mod trusted_setup;
 mod qap;
 mod curve_ops;
 
-use ark_bn254:: Fr;
+use ark_bn254:: {Fr, G1Projective, G2Projective, Bn254};
+use ark_ec:: {CurveGroup, PrimeGroup, pairing::Pairing};
 use r1cs::{LEFT_MATRIX, RIGHT_MATRIX, RESULT_MATRIX};
 use witness::{WITNESS};
 use utils::*;
-use trusted_setup::SRS;
 use qap::{U_X, V_X, W_X, HX_TX, T_X, SRS};
-use curve_ops::{mul_over_curve, pairing_check};
+use curve_ops::*;
 
 fn check_matrix_eq(a: [Fr; 2], b: [Fr; 2]) -> bool {
     let mut is_equal: bool = true;
@@ -36,15 +36,16 @@ fn main() {
 
     let verification_successful: bool = check_matrix_eq(hadamard_product(&l_w, &r_w), o_w);
     */
-    let ptau_sliced: [Fr; 2] = [SRS.ptau[0], SRS.ptau[1]];
-    let u_tau: Fr = arr_sum(&hadamard_product(&U_X, &ptau_sliced));
-    let v_tau: Fr = arr_sum(&hadamard_product(&V_X, &ptau_sliced));
-    let w_tau: Fr = arr_sum(&hadamard_product(&W_X, &ptau_sliced));
-    let h_tau_t_tau: Fr = arr_sum(&hadamard_product(&HX_TX, &SRS.ptau));
-    // let t_tau: Fr = arr_sum(&hadamard_product(&T_X, &ptau3));
 
-    let u_tau_v_tau: Fr = u_tau * v_tau;
-    let w_plus_ht_tau: Fr = w_tau + h_tau_t_tau;
+    let ptaug1_sliced: [G1Projective; 2] = [SRS.ptau_g1[0], SRS.ptau_g1[1]];
+    let ptaug2_sliced: [G2Projective; 2] = [SRS.ptau_g2[0], SRS.ptau_g2[1]];
+    let u_tau: G1Projective = sum_g1_array(&hadamard_g1(&ptaug1_sliced, &U_X));
+    let v_tau: G2Projective = sum_g2_array(&hadamard_g2(&ptaug2_sliced, &V_X));
+    let w_tau: G1Projective = sum_g1_array(&hadamard_g1(&ptaug1_sliced, &W_X));
+    let h_tau_t_tau: G1Projective = sum_g1_array(&hadamard_g1(&SRS.ptau_g1, &HX_TX));
+
+    let u_tau_v_tau = Bn254::pairing(u_tau, v_tau);
+    let w_plus_ht_tau = Bn254::pairing(w_tau + h_tau_t_tau, *G2);
 
     let verification_successful: bool = u_tau_v_tau == w_plus_ht_tau;
 
@@ -60,9 +61,9 @@ fn main() {
     // println!("{} and {}", W_X[0], W_X[1]);
     // println!("{} and {} and {}", HX_TX[0], HX_TX[1], HX_TX[2]);
 
-    let mul_working: bool = mul_over_curve();
-    println!("{}", mul_working);
+    // let mul_working: bool = mul_over_curve();
+    // println!("{}", mul_working);
 
-    let pair_check: bool = pairing_check();
-    println!("{}", pair_check);
+    // let pair_check: bool = pairing_check();
+    // println!("{}", pair_check);
 }
