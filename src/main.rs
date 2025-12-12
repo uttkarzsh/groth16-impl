@@ -12,20 +12,9 @@ use ark_ec:: {CurveGroup, PrimeGroup, pairing::Pairing};
 use r1cs::{LEFT_MATRIX, RIGHT_MATRIX, RESULT_MATRIX};
 use witness::{WITNESS};
 use utils::*;
-use qap::{U_X, V_X, W_X, HX_TX, T_X, SRS};
+use qap::{U_X, V_X, W_X, H_X, SRS};
 use curve_ops::*;
 
-fn check_matrix_eq(a: [Fr; 2], b: [Fr; 2]) -> bool {
-    let mut is_equal: bool = true;
-
-    for i in 0..2 {
-        if a[i] != b[i] {
-            is_equal = false;
-        }
-    }
-
-    is_equal
-}
 
 fn main() {
 
@@ -42,7 +31,7 @@ fn main() {
     let u_tau: G1Projective = sum_g1_array(&hadamard_g1(&ptaug1_sliced, &U_X));
     let v_tau: G2Projective = sum_g2_array(&hadamard_g2(&ptaug2_sliced, &V_X));
     let w_tau: G1Projective = sum_g1_array(&hadamard_g1(&ptaug1_sliced, &W_X));
-    let h_tau_t_tau: G1Projective = sum_g1_array(&hadamard_g1(&SRS.ptau_g1, &HX_TX));
+    let h_tau_t_tau: G1Projective = sum_g1_array(&hadamard_g1(&SRS.srs_hx_ttau, &H_X));
 
     let u_tau_v_tau = Bn254::pairing(u_tau, v_tau);
     let w_plus_ht_tau = Bn254::pairing(w_tau + h_tau_t_tau, *G2);
