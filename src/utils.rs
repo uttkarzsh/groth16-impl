@@ -113,3 +113,11 @@ pub fn calculate_tx<const N: usize>() -> [Fr; N] {
 
     t_x
 }
+
+pub fn calculate_hx(u_x: &[Fr; 2], v_x: &[Fr; 2], w_x: &[Fr; 2], t_x: &[Fr; 3]) -> [Fr; 3]{
+    let uv_x2: [Fr; 3] = polynomial_multiplication(&u_x, &v_x);
+    let w_x2: [Fr;3] = [w_x[0], w_x[1],Fr::from(0u64)];
+
+    let uv_minus_w: [Fr; 3] = sub(&uv_x2, &w_x2);
+    polynomial_division(&uv_minus_w, &t_x, 2, 2)
+} 

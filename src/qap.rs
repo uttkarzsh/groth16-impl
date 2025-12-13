@@ -6,7 +6,7 @@ use crate::trusted_setup::{SRS, generate_srs};
 use std::sync::LazyLock;
 use ark_ff:: Field;
 
-pub fn qap_representation(matrix: &[[Fr; 3]; 2], witness: &[Fr; 3]) -> [Fr; 2] {
+fn qap_representation(matrix: &[[Fr; 3]; 2], witness: &[Fr; 3]) -> [Fr; 2] {
     let matn_x: [[Fr; 2]; 3] = interpolate_matrix(&matrix);
     let mut a_matn_x: [Fr; 2] = scalar_mul(&matn_x[0], witness[0]);
 
@@ -17,22 +17,10 @@ pub fn qap_representation(matrix: &[[Fr; 3]; 2], witness: &[Fr; 3]) -> [Fr; 2] {
     a_matn_x
 }
 
-pub static SRS: LazyLock<SRS<3>> = LazyLock::new(|| { generate_srs::<3>()});
-
-
 pub static U_X: LazyLock<[Fr; 2]> = LazyLock::new(|| {qap_representation(&LEFT_MATRIX, &WITNESS)});
 pub static V_X: LazyLock<[Fr; 2]> = LazyLock::new(|| {qap_representation(&RIGHT_MATRIX, &WITNESS)});
 pub static W_X: LazyLock<[Fr; 2]> = LazyLock::new(|| {qap_representation(&RESULT_MATRIX, &WITNESS)});
-pub static T_X: LazyLock<[Fr; 3]> = LazyLock::new(|| [Fr::from(1u64), Fr::from(-3i64), Fr::from(2u64)]);
-
-pub fn calculate_hx(u_x: &[Fr; 2], v_x: &[Fr; 2], w_x: &[Fr; 2], t_x: &[Fr; 3]) -> [Fr; 3]{
-    let uv_x2: [Fr; 3] = polynomial_multiplication(&u_x, &v_x);
-    let w_x2: [Fr;3] = [w_x[0], w_x[1],Fr::from(0u64)];
-
-    let uv_minus_w: [Fr; 3] = sub(&uv_x2, &w_x2);
-    polynomial_division(&uv_minus_w, &t_x, 2, 2)
-}  
-
+pub static T_X: LazyLock<[Fr; 3]> = LazyLock::new(|| calculate_tx::<3>());
 pub static H_X: LazyLock<[Fr; 3]> = LazyLock::new(|| {calculate_hx(&U_X, &V_X, &W_X, &T_X)});
 
 

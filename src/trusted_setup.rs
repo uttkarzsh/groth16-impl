@@ -27,8 +27,8 @@ impl <const N: usize> SRS <N> {
             ptau_g1[i] = *G1 * ptau[i];
             ptau_g2[i] = *G2 * ptau[i];
         }
-        let T_X: [Fr; N] = calculate_tx::<N>();
-        let t_tau: Fr = arr_sum(&hadamard_product(&ptau, &T_X));
+        let t_x: [Fr; N] = calculate_tx::<N>();
+        let t_tau: Fr = arr_sum(&hadamard_product(&ptau, &t_x));
 
         for i in 0..N {
             let num: Fr = t_tau * ptau[i];
