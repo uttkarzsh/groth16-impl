@@ -24,8 +24,6 @@ impl <const N: usize> SRS <N> {
         
         for i in 0..N {
             ptau[i] = tau.pow([i as u64]);
-            ptau_g1[i] = *G1 * ptau[i];
-            ptau_g2[i] = *G2 * ptau[i];
         }
         let t_x: [Fr; N] = calculate_tx::<N>();
         let t_tau: Fr = arr_sum(&hadamard_product(&ptau, &t_x));
@@ -35,11 +33,13 @@ impl <const N: usize> SRS <N> {
             srs_hx_ttau[i] = *G1 * num;
         }
 
+        for i in 0..N-1 {
+            ptau_g1[i] = *G1 * ptau[i];
+            ptau_g2[i] = *G2 * ptau[i];
+        }
+
         Self { ptau_g1, ptau_g2, srs_hx_ttau }
     }
 }
 
-pub fn generate_srs<const N: usize>() -> SRS<N> {
-    let mut srs = SRS::<N>::new();
-    srs
-}
+pub static srs: LazyLock<SRS<3>> = LazyLock::new(|| SRS::<3>::new());

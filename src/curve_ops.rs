@@ -24,17 +24,17 @@ pub fn pairing_check() -> bool {
 
 }
 
-pub fn hadamard_g1<const N: usize>(a: &[G1Projective; N], b: &[Fr; N]) -> [G1Projective; N]{
-    let mut arr: [G1Projective; N] = [*G1; N];
-    for i in 0..N{
+pub fn hadamard_g1<const N: usize, const M: usize>(a: &[G1Projective; N], b: &[Fr; M]) -> [G1Projective; M]{
+    let mut arr: [G1Projective; M] = [*G1; M];
+    for i in 0..M{
         arr[i] = a[i] * b[i];
     }
     arr
 }
 
-pub fn hadamard_g2<const N: usize>(a: &[G2Projective; N], b: &[Fr; N]) -> [G2Projective; N]{
-    let mut arr: [G2Projective; N] = [*G2; N];
-    for i in 0..N{
+pub fn hadamard_g2<const N: usize, const M: usize>(a: &[G2Projective; N], b: &[Fr; M]) -> [G2Projective; M]{
+    let mut arr: [G2Projective; M] = [*G2; M];
+    for i in 0..M{
         arr[i] = a[i] * b[i];
     }
     arr
