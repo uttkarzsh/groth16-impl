@@ -31,8 +31,23 @@ fn main() {
     let verification_successful: bool = check_matrix_eq(hadamard_product(&l_w, &r_w), o_w);
     */
 
-    let proof: Proof<2,3> = Proof::<2,3>::new(&*QAP_FOR_PROOF);
-    let verification_successful: bool = verify_proof::<2,3>(proof);
+    /* 
+    ///false proof generation
+    
+    let a: G1Projective = *G1 * Fr::from(2u64);
+    let b: G2Projective = *G2 * Fr::from(5u32);
+    let c: G1Projective = *G1 * Fr::from(10u32);
+
+    let proof: Proof<2,3> = Proof::<2,3>{
+        A: a,
+        B: b,
+        C: c
+    };
+    */
+
+    let proof: Proof = Proof::new(&*QAP_FOR_PROOF);
+
+    let verification_successful: bool = verify_proof(&proof);
 
     if verification_successful {
         println!("witness correct yay");

@@ -2,16 +2,17 @@ use ark_bn254::{G1Projective, G2Projective};
 use crate::trusted_setup::{srs, SRS};
 use crate::qap::{QAP, QAP_FOR_PROOF};
 use crate::curve_ops::*;
+use crate::r1cs::{N, M, D};
 
-pub struct Proof <const N: usize, const M: usize> {
+pub struct Proof {
     pub A: G1Projective,
     pub B: G2Projective,
     pub C: G1Projective
 }
 
-impl <const N: usize, const M: usize> Proof <N,M>{
+impl Proof{
 
-    pub fn new(_qap: &QAP<N,M>) -> Self {
+    pub fn new(_qap: &QAP) -> Self {
         let u_tau: G1Projective = sum_g1_array(&hadamard_g1(&srs.ptau_g1, &_qap.u_x));
         let v_tau: G2Projective = sum_g2_array(&hadamard_g2(&srs.ptau_g2, &_qap.v_x));
         let w_tau: G1Projective = sum_g1_array(&hadamard_g1(&srs.ptau_g1, &_qap.w_x));

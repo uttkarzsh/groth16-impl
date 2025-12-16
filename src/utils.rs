@@ -1,10 +1,10 @@
 use ark_bn254:: Fr;
 use ark_ff::Field;
 
-fn check_matrix_eq(a: [Fr; 2], b: [Fr; 2]) -> bool {
+fn check_matrix_eq<const N: usize>(a: [Fr; N], b: [Fr; N]) -> bool {
     let mut is_equal: bool = true;
 
-    for i in 0..2 {
+    for i in 0..N {
         if a[i] != b[i] {
             is_equal = false;
         }
@@ -13,10 +13,10 @@ fn check_matrix_eq(a: [Fr; 2], b: [Fr; 2]) -> bool {
     is_equal
 }
 
-pub fn matrix_mul(matrix: &[[Fr; 3]; 2], witness: &[Fr; 3]) -> [Fr; 2]{
-    let mut out: [Fr; 2] = [0u64.into(), 0u64.into()];
-    for i in 0..2 {
-        for j in 0..3 {
+pub fn matrix_mul<const N: usize, const M: usize>(matrix: &[[Fr; M]; N], witness: &[Fr; M]) -> [Fr; N]{
+    let mut out: [Fr; N] = [Fr::from(0u64); N];
+    for i in 0..N {
+        for j in 0..M {
             out[i] += matrix[i][j] * witness[j];
         }
     }
