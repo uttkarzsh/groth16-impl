@@ -5,11 +5,11 @@ use crate::witness::WITNESS;
 use std::sync::LazyLock;
 use ark_ff:: Field;
 
-fn qap_representation(matrix: &[[Fr; 3]; 2], witness: &[Fr; 3]) -> [Fr; 2] {
-    let matn_x: [[Fr; 2]; 3] = interpolate_matrix(&matrix);
-    let mut a_matn_x: [Fr; 2] = scalar_mul(&matn_x[0], witness[0]);
+fn qap_representation<const N: usize, const M:usize>(matrix: &[[Fr; M]; N], witness: &[Fr; M]) -> [Fr; N] {
+    let matn_x: [[Fr; N]; M] = interpolate_matrix(&matrix);
+    let mut a_matn_x: [Fr; N] = scalar_mul(&matn_x[0], witness[0]);
 
-    for i in 1..3 {
+    for i in 1..M {
         a_matn_x = add(&a_matn_x, &scalar_mul(&matn_x[i], witness[i]));
     }
 

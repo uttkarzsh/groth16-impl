@@ -1,4 +1,5 @@
 use ark_bn254:: Fr;
+use ark_ff::Field;
 
 fn check_matrix_eq(a: [Fr; 2], b: [Fr; 2]) -> bool {
     let mut is_equal: bool = true;
@@ -62,19 +63,70 @@ pub fn arr_sum<const N: usize>(arr: &[Fr; N]) -> Fr{
     sum
 }
 
-pub fn polynomial_multiplication(a: &[Fr; 2], b: &[Fr; 2]) -> [Fr; 3] {
-    [a[0] * b[0], a[0] * b[1] + a[1] * b[0], a[1] * b[1]]
+fn polynomial_multiplication<const N: usize, const M: usize>(a: &[Fr; N], b: &[Fr; N]) -> [Fr; M]{
+    let mut product: [Fr; M] = [Fr::from(0u64); M];
+    for i in 0..N {
+        for j in 0..N{
+            product[j + i] += a[i] * b[j];
+        }
+    }
+    product
 }
 
-fn interpolate(matrix: &[[Fr; 3]; 2], column: usize) -> [Fr; 2] {
-    let xs: [Fr; 2] = [1u64.into(), 2u64.into()];
-    let ys: [Fr; 2] = [matrix[0][column], matrix[1][column]];
+fn lagrange_interpolation<const N: usize>(xs: &[Fr; N], ys: &[Fr; N]) -> [Fr; N] {
+    let mut result = [Fr::from(0u64); N];
     
-    [Fr::from(2u64) * ys[0] - ys[1], ys[1] - ys[0]]
+    for i in 0..N {
+        let mut basis = [Fr::from(0u64); N];
+        basis[0] = Fr::from(1u64);
+        
+        let mut denom = Fr::from(1u64);
+        for j in 0..N {
+            if i != j {
+                denom *= xs[i] - xs[j];
+            }
+        }
+        let denom_inv = denom.inverse().unwrap();
+        
+        for j in 0..N {
+            if i != j {
+                let mut new_basis = [Fr::from(0u64); N];
+                for k in 0..N {
+                    if k > 0 {
+                        new_basis[k] += basis[k - 1]; 
+                    }
+                    new_basis[k] -= basis[k] * xs[j]; 
+                }
+                basis = new_basis;
+            }
+        }
+        for k in 0..N {
+            result[k] += basis[k] * ys[i] * denom_inv;
+        }
+    }
+    
+    result
 }
 
-pub fn interpolate_matrix(matrix: &[[Fr; 3]; 2]) -> [[Fr; 2]; 3] {
-    [interpolate(matrix, 0), interpolate(matrix, 1), interpolate(matrix, 2)]
+fn interpolate<const N: usize, const M:usize>(matrix: &[[Fr; M]; N], column: usize) -> [Fr; N] {
+    let mut xs: [Fr; N] = [Fr::from(0u32); N];
+    let mut ys: [Fr; N] = [Fr::from(0u32); N];
+    
+    for i in 1..=N{
+        xs[i-1] = Fr::from(i as u64);
+        ys[i-1] = matrix[i-1][column];
+    }
+
+    lagrange_interpolation(&xs, &ys)
+}
+
+pub fn interpolate_matrix<const N: usize, const M:usize>(matrix: &[[Fr; M]; N]) -> [[Fr; N]; M] {
+    let mut interpolated_matrix: [[Fr; N]; M] = [[Fr::from(0u64); N]; M];
+    for i in 0..M{
+        interpolated_matrix[i] = interpolate(matrix, i);
+    }
+
+    interpolated_matrix
 }
 
 pub fn polynomial_division<const N: usize>(px: &[Fr; N], qx: &[Fr; N], deg_p: usize, deg_q: usize) -> [Fr; N] {
