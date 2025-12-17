@@ -6,10 +6,10 @@ use crate::qap::{QAP, QAP_FOR_PROOF};
 use crate::curve_ops::*;
 use crate::r1cs::{N, M, D};
 
-pub struct Proof {
-    pub a_1: G1Projective,
-    pub b_2: G2Projective,
-    pub c_1: G1Projective
+pub struct Proof {  //α,β
+    pub a_1: G1Projective, // [A]1 = [α]1 + Σai*ui(x) + r[δ]1
+    pub b_2: G2Projective, // [B]2 = [β]2 + Σai*vi(x) + s[δ]2
+    pub c_1: G1Projective  // [C]1 = Σai*[Ψi]1 + s*[A]1 + r*[B]1 - rs[δ]1
 }
 
 impl Proof{
@@ -22,8 +22,8 @@ impl Proof{
         let h_tau_t_tau: G1Projective = sum_g1_array(&hadamard_g1(&GENERATED_SRS.srs_hx_ttau, &_qap.h_x));
 
 
+        //salting proof for true zero knowledge
         let mut rng = thread_rng();
-
         let r: Fr = Fr::rand(&mut rng);
         let s: Fr = Fr::rand(&mut rng);
 

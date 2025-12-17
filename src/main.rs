@@ -12,7 +12,6 @@ mod verification;
 use ark_bn254:: {Fr, G1Projective, G2Projective, Bn254};
 use ark_ec:: {CurveGroup, PrimeGroup, pairing::Pairing};
 use r1cs::{LEFT_MATRIX, RIGHT_MATRIX, RESULT_MATRIX, N, M, D, L};
-use witness::{WITNESS};
 use utils::*;
 use qap::{QAP, QAP_FOR_PROOF};
 use trusted_setup:: {SRS, GENERATED_SRS};

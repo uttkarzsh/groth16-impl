@@ -8,17 +8,22 @@ use crate::curve_ops::{G1, G2};
 use crate::r1cs::{LEFT_MATRIX, RIGHT_MATRIX, RESULT_MATRIX, N, M, D, L};
 
 pub struct SRS {
+    //toxic waste curve points
     pub alpha_1: G1Projective,
     pub beta_1: G1Projective,
     pub beta_2: G2Projective,
     pub gamma_2: G2Projective,
     pub delta_1: G1Projective,
     pub delta_2: G2Projective,
-    pub ptau_g1: [G1Projective; D],
-    pub ptau_g2: [G2Projective; D],
-    pub srs_hx_ttau: [G1Projective; D],
-    pub psi_pub: [G1Projective; L],
-    pub psi_pvt: [G1Projective; M - L]
+
+    //powers of tau
+    pub ptau_g1: [G1Projective; D],     //powers of τ (G1)
+    pub ptau_g2: [G2Projective; D],     //powers of τ (G2)
+    pub srs_hx_ttau: [G1Projective; D], //powers of τ * t(τ)
+
+    //psi = alpha * vi(x) + beta * ui(x) + wi(x)
+    pub psi_pub: [G1Projective; L],     //srs for pub inputs
+    pub psi_pvt: [G1Projective; M - L]  //srs for private inputs
 }
 
 impl SRS {
@@ -26,7 +31,7 @@ impl SRS {
         let mut rng = thread_rng();
         let tau: Fr = Fr::rand(&mut rng);
 
-        let mut ptau: [Fr; D] = [Fr::from(1u64); D];
+        let mut ptau: [Fr; D] = [Fr::from(1u64); D];    // τ
         let mut ptau_g1: [G1Projective; D] = [*G1; D];
         let mut ptau_g2: [G2Projective; D] = [*G2; D];
         let mut srs_hx_ttau: [G1Projective; D] = [*G1; D];

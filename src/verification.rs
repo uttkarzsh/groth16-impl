@@ -7,8 +7,9 @@ use crate::r1cs::{L};
 
 pub fn verify_proof(proof: &Proof, pub_inputs: &[Fr; L]) -> bool {
     let lhs = Bn254::pairing(proof.a_1, proof.b_2);
-    let mut x: G1Projective = *G1 * Fr::from(0u64);
 
+    //x is Ψ evaluations * corresponding public elements of the witness
+    let mut x: G1Projective = *G1 * Fr::from(0u64);
     for i in 0..L {
         x += GENERATED_SRS.psi_pub[i] * pub_inputs[i];
     }
@@ -17,5 +18,6 @@ pub fn verify_proof(proof: &Proof, pub_inputs: &[Fr; L]) -> bool {
 
     let rhs = Bn254::multi_pairing([GENERATED_SRS.alpha_1, x, proof.c_1], [GENERATED_SRS.beta_2, GENERATED_SRS.gamma_2, GENERATED_SRS.delta_2]);
 
+    // e(A,B) = e(α,β).e(χ,γ).e(C,δ)
     lhs == rhs
 }

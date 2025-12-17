@@ -9,24 +9,13 @@ use crate::trusted_setup::{GENERATED_SRS};
 use crate::curve_ops::*;
 
 
-fn qap_representation(matrix: &[[Fr; M]; N], witness: &[Fr; M]) -> [Fr; N] {
-    let matn_x: [[Fr; N]; M] = interpolate_matrix(&matrix);
-    let mut a_matn_x: [Fr; N] = scalar_mul(&matn_x[0], witness[0]);
-
-    for i in 1..M {
-        a_matn_x = add(&a_matn_x, &scalar_mul(&matn_x[i], witness[i]));
-    }
-
-    a_matn_x
-}
-
 pub struct QAP {
     pub u_x: [Fr; N],
     pub v_x: [Fr; N],
     pub w_x: [Fr; N],
     pub t_x: [Fr; D],
     pub h_x: [Fr; D],
-    pub psi_pvt_w: [G1Projective; M - L]
+    pub psi_pvt_w: [G1Projective; M - L]    //Ψ polynomials from trusted setup evaluated at τ (multiplied by corresponding witness element)
 }
 
 impl QAP {

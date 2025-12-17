@@ -181,3 +181,14 @@ pub fn calculate_hx(u_x: &[Fr; 2], v_x: &[Fr; 2], w_x: &[Fr; 2], t_x: &[Fr; 3]) 
     let uv_minus_w: [Fr; 3] = sub(&uv_x2, &w_x2);
     polynomial_division(&uv_minus_w, &t_x, 2, 2)
 } 
+
+pub fn qap_representation(matrix: &[[Fr; M]; N], vector: &[Fr; M]) -> [Fr; N] {
+    let matn_x: [[Fr; N]; M] = interpolate_matrix(&matrix);
+    let mut a_matn_x: [Fr; N] = scalar_mul(&matn_x[0], vector[0]);
+
+    for i in 1..M {
+        a_matn_x = add(&a_matn_x, &scalar_mul(&matn_x[i], vector[i]));
+    }
+
+    a_matn_x
+}
