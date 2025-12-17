@@ -86,4 +86,4 @@ impl SRS {
     }
 }
 
-pub static srs: LazyLock<SRS> = LazyLock::new(|| SRS::new());
+pub static GENERATED_SRS: LazyLock<SRS> = LazyLock::new(|| SRS::new());

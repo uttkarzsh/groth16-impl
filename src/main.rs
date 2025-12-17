@@ -15,7 +15,7 @@ use r1cs::{LEFT_MATRIX, RIGHT_MATRIX, RESULT_MATRIX, N, M, D, L};
 use witness::{WITNESS};
 use utils::*;
 use qap::{QAP, QAP_FOR_PROOF};
-use trusted_setup:: {SRS, srs};
+use trusted_setup:: {SRS, GENERATED_SRS};
 use proof::{Proof};
 use curve_ops::*;
 use verification::{verify_proof};

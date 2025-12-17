@@ -5,7 +5,7 @@ use std::sync::LazyLock;
 use crate::utils::*;
 use crate::r1cs::{LEFT_MATRIX, RIGHT_MATRIX, RESULT_MATRIX, N, M, D, L};
 use crate::witness::WITNESS;
-use crate::trusted_setup::{srs};
+use crate::trusted_setup::{GENERATED_SRS};
 use crate::curve_ops::*;
 
 
@@ -40,7 +40,7 @@ impl QAP {
         let mut psi_pvt_w: [G1Projective; M - L] = [*G1; M - L];
 
         for i in 0..M - L {
-            psi_pvt_w[i] = srs.psi_pvt[i] * witness[i + L];
+            psi_pvt_w[i] = GENERATED_SRS.psi_pvt[i] * witness[i + L];
         }
         
         Self { u_x, v_x, w_x, t_x, h_x, psi_pvt_w }
