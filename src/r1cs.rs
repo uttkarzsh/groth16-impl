@@ -20,6 +20,9 @@ macro_rules! fr_matrix {
 
 pub static N: usize = 2;
 pub static M: usize = 3;
+pub static D:usize = 2 * N - 1;
+pub static L: usize = 1;
+
 
 pub static LEFT_MATRIX: LazyLock<[[Fr; M]; N]> = LazyLock::new(|| fr_matrix![
     [0, 1, 0],
@@ -36,4 +39,3 @@ pub static RESULT_MATRIX: LazyLock<[[Fr; M]; N]> = LazyLock::new(|| fr_matrix![
     [0, 0, 0]
 ]);
 
-pub static D:usize = 2*N-1;

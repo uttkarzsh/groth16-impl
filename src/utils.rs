@@ -31,6 +31,14 @@ pub fn add<const N: usize>(a: &[Fr; N], b: &[Fr; N]) -> [Fr; N]{
     arr
 }
 
+pub fn add_three_arr<const N: usize>(a: &[Fr; N], b: &[Fr; N], c: &[Fr; N]) -> [Fr; N]{
+    let mut arr: [Fr; N] = [Fr::from(0u64); N];
+    for i in 0..N{
+        arr[i] = a[i] + b[i] + c[i];
+    }
+    arr
+}
+
 pub fn sub<const N: usize>(a: &[Fr; N], b: &[Fr; N]) -> [Fr; N]{
     let mut arr: [Fr; N] = [Fr::from(0u64); N];
     for i in 0..N{
@@ -47,9 +55,9 @@ pub fn scalar_mul<const N: usize>(matrix: &[Fr; N], scalar: Fr) -> [Fr; N] {
     arr
 }
 
-pub fn hadamard_product<const N: usize>(a: &[Fr; N], b: &[Fr; N]) -> [Fr; N]{
-    let mut arr: [Fr; N] = [Fr::from(0u64); N];
-    for i in 0..N{
+pub fn hadamard_product<const N: usize, const M: usize>(a: &[Fr; N], b: &[Fr; M]) -> [Fr; M]{
+    let mut arr: [Fr; M] = [Fr::from(0u64); M];
+    for i in 0..M{
         arr[i] = a[i] * b[i];
     }
     arr
