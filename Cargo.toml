@@ -6,5 +6,8 @@ edition = "2024"
 [dependencies]
 ark-ff = "0.5"
 ark-bn254 = "0.5"
+ark-bls12-381 = "0.5"
+ark-bls12-377 = "0.5"
+ark-bw6-761 = "0.5"
 ark-ec = "0.5"
 rand = "0.8.5"

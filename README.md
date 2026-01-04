@@ -3,7 +3,7 @@
 An implementation of the **Groth16 zk-SNARK protocol** in Rust.  
 This project follows the algorithm end-to-end: from **R1CS constraints**, to **QAP construction**, to **trusted setup**, **proof generation**, and **verification**.
 
-The implementation is intentionally explicit and low-level. Nothing is hidden behind DSLs or circuit compilers. If you want to understand how Groth16 actually works under the hood, this code is meant to be read.
+The implementation is intentionally explicit and low-level. Nothing is hidden behind DSLs or circuit compilers. If you want to understand how Groth16 actually works under the hood, this code is meant to be read. 
 
 ---
 
@@ -11,11 +11,24 @@ The implementation is intentionally explicit and low-level. Nothing is hidden be
 
 This implementation uses the following `arkworks` libraries:
 
-- `ark-bn254` — BN254 pairing-friendly elliptic curve
 - `ark-ff` — finite field arithmetic
 - `ark-ec` — elliptic curve and pairing abstractions
+- `arkworks curve libraries`
 
 All group operations, pairings, and field arithmetic are handled explicitly through these libraries.
+
+---
+
+## Curves Supported
+
+This implementation is `curve-agnostic`, meaning it is not limited to just one curve. You can use any of the following curves to verify your proof:
+
+- BN254
+- BLS12-381
+- BLS12-377
+- BW-767
+
+You can also modify `Cargo.toml` and use any other curve of your choice (as long as they are pairing-friendly).
 
 ---
 
@@ -49,6 +62,7 @@ All group operations, pairings, and field arithmetic are handled explicitly thro
     - `L` → number of public inputs
 
 - **Minimal interface**
+  - Define Curve to be used in `types.rs`
   - Define constraints in `r1cs.rs`
   - Define witness values in `witness.rs`
   - Run with `cargo run`
